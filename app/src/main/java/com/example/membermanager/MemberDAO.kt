@@ -50,6 +50,8 @@ class MemberDAO(context:Context) {
     }
 
     fun close(){
-        db.close()
+        if(db.isOpen){
+            db.close()
+        }
     }
 }

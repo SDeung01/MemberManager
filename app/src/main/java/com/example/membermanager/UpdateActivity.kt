@@ -3,6 +3,7 @@ package com.example.membermanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import com.example.membermanager.databinding.ActivityUpdateBinding
@@ -13,6 +14,8 @@ class UpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         memberId = intent.getStringExtra("memberId").toString()
 
@@ -44,5 +47,15 @@ class UpdateActivity : AppCompatActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }.run { startActivities(arrayOf(this)) }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

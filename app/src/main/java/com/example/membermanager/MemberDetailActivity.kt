@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import com.example.membermanager.databinding.ActivityMemberDetailBinding
@@ -15,6 +16,8 @@ class MemberDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMemberDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         memberId = intent.getStringExtra("memberId").toString()
 
@@ -37,6 +40,7 @@ class MemberDetailActivity : AppCompatActivity() {
         val listBtn: Button = binding.listBtn
 
         updateBtn.setOnClickListener {
+            memberDAO.close()
             Intent(this, UpdateActivity::class.java).apply {
                 putExtra("memberId", memberId)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -49,6 +53,7 @@ class MemberDetailActivity : AppCompatActivity() {
                 .setPositiveButton("삭제",
                     DialogInterface.OnClickListener { dialog, id ->
                         memberDAO.deleteMember(memberId)
+                        memberDAO.close()
                         val intent = Intent(this, MemberListActivity::class.java)
                         startActivity(intent)
                     })
@@ -58,10 +63,21 @@ class MemberDetailActivity : AppCompatActivity() {
             builder.show()
         }
         listBtn.setOnClickListener {
+            memberDAO.close()
             val intent = Intent(this, MemberListActivity::class.java)
             startActivity(intent)
         }
+    }
 
-        memberDAO.close()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                val intent = Intent(this, MemberListActivity::class.java)
+                startActivity(intent)
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

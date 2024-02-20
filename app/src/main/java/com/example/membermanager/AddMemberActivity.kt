@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.widget.Toast
 import com.example.membermanager.databinding.ActivityAddMemberBinding
 import com.example.membermanager.databinding.ActivityMainBinding
@@ -13,6 +14,8 @@ class AddMemberActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityAddMemberBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val addBtn = binding.addBtn
 
@@ -34,7 +37,18 @@ class AddMemberActivity : AppCompatActivity() {
 
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
